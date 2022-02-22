@@ -37,6 +37,10 @@ class ContController {
         
         res.status(202).json({message: `registro- ${_id} - removido`});
     }
+
+    
+
+
 }
 
 
