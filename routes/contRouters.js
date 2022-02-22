@@ -11,6 +11,8 @@ router.get("/reportExp", ReportController.showAvExpenses);
 router.get("/reportRev", ReportController.showAvRevenue);
 router.get("/show", ContController.showCont);
 router.post("/update", ContController.updateCont);
+router.get("/monthReport/:month/:year/:opcode", ReportController.monthReport);
+router.get("/balance/:month/:year", ReportController.balanceReport);
 
 module.exports = router;
 
