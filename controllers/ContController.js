@@ -37,6 +37,31 @@ class ContController {
         
         res.status(202).json({message: `registro- ${_id} - removido`});
     }
+
+    static async updateCont(req, res){
+        
+        const { _id, date, value, title, description, opcode } = req.body;
+
+        const cont = await ContSchema.find({_id:_id});
+        console.log(cont);
+
+        if(cont == null || !cont || cont == ""){
+            res.status(401).json({message: `parâmetro-${_id}-inexistente`});
+            return
+        }
+
+        await ContSchema.findByIdAndUpdate(_id, {value, date,  title, description, opcode});
+
+        res.status(202).json({message: `registro - ${_id} - atualizado`});
+    }
+
+    static async showCont(req, res){
+        const cont = await ContSchema.find({});
+        res.status(202).json(cont);
+    }
+
+
+
 }
 
 
