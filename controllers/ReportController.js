@@ -32,11 +32,20 @@ class ReportController{
             return
         }
 
+        if(month > 12 || month < 1){
+            res.status(402).json({message: `lista-parâmetros-inválidos-nulo`});
+            return
+        }
+
         const desc= [];
         let soma =0;
-        const cont = await ContSchema.find({date: {$gte: new Date(`${year},${month-1},30`), $lte: new Date(`${year},${month},30`)}}).find({opcode:`${opcode}`});
+        const cont = await ContSchema.find({date: {$gte: new Date(`${year},${month},1`), $lte: new Date(`${year},${month},30`)}}).find({opcode:`${opcode}`});
         for(let desc of cont){soma += desc.value};
-        console.log(cont, month, year, opcode);
+        
+        if(month > 12 || month < 1){
+            res.status(402).json({message: `lista-parâmetros-inválidos-nulo`});
+            return
+        }
 
 
         if(opcode == true){ 
@@ -52,20 +61,23 @@ class ReportController{
     static async balanceReport(req, res){
         let {month, year}  = req.params;
 
+        if(month > 12 || month < 1){
+            res.status(402).json({message: `lista-parâmetros-inválidos-nulo`});
+            return
+        }
+
         const descR = [];
         const descD = [];
         let somaR =0;
         let somaD =0;
-        const contR = await ContSchema.find({date: {$gte: new Date(`${year},${month-1},30`), $lte: new Date(`${year},${month},30`)}}).find({opcode: 1});
+        const contR = await ContSchema.find({date: {$gte: new Date(`${year},${month},1`), $lte: new Date(`${year},${month},30`)}}).find({opcode: 1});
         for(let descR of contR){somaR += descR.value};
 
-        const contD = await ContSchema.find({date: {$gte: new Date(`${year},${month-1},30`), $lte: new Date(`${year},${month},30`)}}).find({opcode: 0});
+        const contD = await ContSchema.find({date: {$gte: new Date(`${year},${month},1`), $lte: new Date(`${year},${month},30`)}}).find({opcode: 0});
         for(let descD of contD){somaD += descD.value};
-        console.log(month, year);
-
+        
         let resultado = parseFloat(somaR - somaD);
-        console.log(resultado);
-
+        
         res.status(201).json({despesas: `DESPESAS ${month}/${year} : R$ ${somaD}`, receitas: `RECEITAS ${month}/${year} : R$ ${somaR}`, resultado});
         
         }
